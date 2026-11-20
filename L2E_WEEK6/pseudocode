@@ -1,0 +1,281 @@
+'''question 1
+
+SET numbers to [12, 5, 27, 8, 14, 27, 3]
+
+# --- PASS 1: Find Smallest, Largest, Total, and Average ---
+SET smallest_val to the first item in numbers
+SET smallest_index to 0
+SET largest_val to the first item in numbers
+SET largest_index to 0
+SET total_sum to 0
+SET count to 0
+
+FOR each index from 0 up to length of numbers - 1:
+    SET current_num to numbers[index]
+    
+    # Add to total and count
+    ADD current_num to total_sum
+    ADD 1 to count
+    
+    # Check for new strictly smallest value
+    IF current_num is less than smallest_val:
+        SET smallest_val to current_num
+        SET smallest_index to index
+        
+    # Check for new strictly largest value
+    IF current_num is greater than largest_val:
+        SET largest_val to current_num
+        SET largest_index to index
+
+SET average to total_sum divided by count
+
+# --- PASS 2: Count numbers above average ---
+SET above_average_count to 0
+
+FOR each current_num in numbers:
+    IF current_num is greater than average:
+        ADD 1 to above_average_count
+
+# --- PRINT RESULTS ---
+PRINT smallest_val, smallest_index, largest_val, largest_index, total_sum, average, above_average_count
+'''
+
+
+
+'''question 2
+
+SET values to [14, 7, 22, 9, 7, 31, 7, 5]
+SET target to 7
+SET matching_indices to an empty list
+
+FOR each index from 0 up to length of values - 1:
+    IF values[index] is equal to target:
+        APPEND index to matching_indices
+
+# --- PROCESS RESULTS ---
+SET match_count to length of matching_indices
+
+IF match_count is 0:
+    PRINT "Target not found"
+ELSE:
+    SET first_occurrence to matching_indices[0]
+    SET last_occurrence to matching_indices[match_count - 1]
+    PRINT matching_indices, match_count, first_occurrence, last_occurrence
+'''
+
+
+'''question 3
+SET matrix to [[2, 4, 6], [1, 3, 5], [10, 20, 30]]
+
+# --- STEP 1: Row Totals and Averages ---
+FOR each row_index from 0 up to length of matrix - 1:
+    SET current_row to matrix[row_index]
+    SET row_sum to 0
+    SET column_count to length of current_row
+    
+    FOR each item in current_row:
+        ADD item to row_sum
+        
+    SET row_average to row_sum divided by column_count
+    PRINT row_index + 1, row_sum, row_average
+
+# --- STEP 2: Column Totals ---
+SET total_rows to length of matrix
+SET total_columns to length of matrix[0] # assuming rectangular matrix
+
+FOR each col_index from 0 up to total_columns - 1:
+    SET col_sum to 0
+    FOR each row_index from 0 up to total_rows - 1:
+        SET item to matrix[row_index][col_index]
+        ADD item to col_sum
+    PRINT col_index + 1, col_sum
+'''
+
+
+'''question 4
+SET input_string to "[(a + b) * {c - d}]"
+SET stack to an empty list
+SET is_balanced to True
+
+FOR each character in input_string:
+    # Push opening brackets
+    IF character is '(', '[', or '{':
+        APPEND character to stack
+        
+    # Check closing brackets
+    ELSE IF character is ')', ']', or '}':
+        # If a closer appears but the stack is empty, it's unbalanced
+        IF stack is empty:
+            SET is_balanced to False
+            BREAK loop
+            
+        SET last_opened to REMOVE and GET last item from stack
+        
+        # Check for mismatches
+        IF character is ')' AND last_opened is not '(':
+            SET is_balanced to False
+            BREAK loop
+        IF character is ']' AND last_opened is not '[':
+            SET is_balanced to False
+            BREAK loop
+        IF character is '}' AND last_opened is not '{':
+            SET is_balanced to False
+            BREAK loop
+
+# Final verification: Stack must be entirely empty
+IF stack is not empty:
+    SET is_balanced to False
+
+IF is_balanced is True:
+    PRINT "Balanced"
+ELSE:
+    PRINT "Not balanced"
+'''
+
+'''question 5
+SET tasks to an empty list
+
+LOOP infinitely:
+    PRINT menu choices ("add", "view", "remove", "done", "quit")
+    GET user_input and convert to lowercase
+    
+    IF user_input is "add":
+        GET task_text from user
+        SET new_task to a list containing [task_text, False]
+        APPEND new_task to tasks
+        PRINT "Task added."
+        
+    ELSE IF user_input is "view":
+        IF length of tasks is 0:
+            PRINT "Your to-do list is empty."
+        ELSE:
+            FOR each index from 0 up to length of tasks - 1:
+                SET task to tasks[index]
+                SET status_symbol to " "
+                IF task[1] is True:
+                    SET status_symbol to "x"
+                PRINT index + 1, status_symbol, task[0]
+                
+    ELSE IF user_input is "done" or "remove":
+        IF length of tasks is 0:
+            PRINT "No tasks available to modify."
+        ELSE:
+            GET task_num_str from user
+            # Validation
+            IF task_num_str is not numeric:
+                PRINT "Invalid input. Please enter a valid number."
+            ELSE:
+                SET choice_index to integer value of task_num_str - 1
+                IF choice_index is less than 0 OR choice_index is greater than or equal to length of tasks:
+                    PRINT "Task number out of range."
+                ELSE:
+                    IF user_input is "done":
+                        SET tasks[choice_index][1] to True
+                        PRINT "Task marked as done."
+                    ELSE:
+                        REMOVE item at choice_index from tasks
+                        PRINT "Task removed."
+                        
+    ELSE IF user_input is "quit":
+        PRINT "Goodbye!"
+        BREAK loop
+        
+    ELSE:
+        PRINT "Unknown command. Try again."
+'''
+
+'''question 6
+GET user_year_str from user
+SET year to integer value of user_year_str
+
+SET is_leap to False
+
+IF year is evenly divisible by 4 (year % 4 == 0):
+    IF year is evenly divisible by 100 (year % 100 == 0):
+        IF year is evenly divisible by 400 (year % 400 == 0):
+            SET is_leap to True
+        ELSE:
+            SET is_leap to False
+    ELSE:
+        SET is_leap to True
+ELSE:
+    SET is_leap to False
+
+IF is_leap is True:
+    PRINT year "is a leap year"
+ELSE:
+    PRINT year "is not a leap year"
+
+# --- OPTIONAL STRETCH: Next 3 leap years ---
+SET found_count to 0
+SET check_year to year + 1
+
+PRINT "The next 3 leap years are:"
+WHILE found_count is less than 3:
+    # Run the exact same divisibility logic on check_year
+    IF check_year % 4 == 0 AND (check_year % 100 != 0 OR check_year % 400 == 0):
+        PRINT check_year
+        ADD 1 to found_count
+    ADD 1 to check_year
+'''
+
+
+
+'''question 7
+SET input_list to [10, 20, 10, 30, 20]
+SET seen_items to an empty list
+SET duplicate_items to an empty list
+
+FOR each item in input_list:
+    # Check manual membership
+    SET item_already_seen to False
+    FOR each seen in seen_items:
+        IF item is equal to seen:
+            SET item_already_seen to True
+            BREAK loop
+            
+    IF item_already_seen is True:
+        # Check if it's already recorded in duplicates list
+        SET already_in_duplicates to False
+        FOR each dup in duplicate_items:
+            IF item is equal to dup:
+                SET already_in_duplicates to True
+                BREAK loop
+                
+        IF already_in_duplicates is False:
+            APPEND item to duplicate_items
+    ELSE:
+        APPEND item to seen_items
+
+PRINT duplicate_items
+'''
+
+
+'''question 8
+SET input_string to "aaabbc"
+
+IF length of input_string is 0:
+    PRINT ""
+    END PROGRAM
+
+SET compressed_result to ""
+SET current_char to first character of input_string
+SET current_count to 1
+
+FOR each index from 1 up to length of input_string - 1:
+    SET char to input_string[index]
+    
+    IF char is equal to current_char:
+        ADD 1 to current_count
+    ELSE:
+        # Commit the finished run to the result string
+        CONCATENATE current_char and string value of current_count onto compressed_result
+        # Reset tracker for the new character run
+        SET current_char to char
+        SET current_count to 1
+
+# Commit the final remaining run after exiting the loop
+CONCATENATE current_char and string value of current_count onto compressed_result
+
+PRINT compressed_result
+'''
